@@ -6,6 +6,7 @@ package do
 
 import (
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
 )
 
 // TaskResult is the golang structure of table task_result for DAO operations like Where/Data.
@@ -17,7 +18,7 @@ type TaskResult struct {
 	Status   interface{} // 任务执行结果
 	Stdout   interface{} // 标准输出
 	StdErr   interface{} // 标准错误
-	CreateAt interface{} //
-	UpdateAt interface{} //
-	DeleteAt interface{} //
+	CreateAt *gtime.Time //
+	UpdateAt *gtime.Time //
+	DeleteAt *gtime.Time //
 }

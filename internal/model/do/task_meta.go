@@ -6,6 +6,7 @@ package do
 
 import (
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
 )
 
 // TaskMeta is the golang structure of table task_meta for DAO operations like Where/Data.
@@ -19,7 +20,7 @@ type TaskMeta struct {
 	ScriptArgs interface{} // 脚本参数
 	Creator    interface{} // 创建者
 	Done       interface{} // 执行是否结束：0:没结束 1:结束
-	CreateAt   interface{} //
-	UpdateAt   interface{} //
-	DeleteAt   interface{} //
+	CreateAt   *gtime.Time //
+	UpdateAt   *gtime.Time //
+	DeleteAt   *gtime.Time //
 }

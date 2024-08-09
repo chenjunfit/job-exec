@@ -1,21 +1,28 @@
 package main
 
 import (
+	_ "job-exec/internal/logic"
+	"job-exec/internal/logic/tasksync"
+
 	"context"
-	"github.com/gogf/gf/v2/errors/gerror"
-	"github.com/gogf/gf/v2/os/gctx"
-	"github.com/gogf/gf/v2/os/glog"
-	"github.com/oklog/run"
 	"job-exec/internal/cmd"
+	_ "job-exec/internal/logic/jobexec"
 	_ "job-exec/internal/packed"
 	"os"
 	"os/signal"
 	"syscall"
+
+	_ "github.com/gogf/gf/contrib/drivers/mysql/v2"
+	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/gogf/gf/v2/os/glog"
+	"github.com/oklog/run"
 )
 
 func main() {
 	var (
 		localG  run.Group
+		t       = new(tasksync.TaskSync)
 		signals = []os.Signal{
 			os.Interrupt, os.Kill, syscall.SIGKILL, syscall.SIGSTOP,
 			syscall.SIGHUP, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGILL, syscall.SIGTRAP,
@@ -89,6 +96,19 @@ func main() {
 					}
 				}
 			}
+		}, func(err error) {
+			cancelAll()
+		})
+	}
+
+	//读取任务到内存
+	{
+		localG.Add(func() error {
+			err := t.SyncManager(ctxAll)
+			if err != nil {
+				glog.Error(ctxAll, "msg: ", err)
+			}
+			return err
 		}, func(err error) {
 			cancelAll()
 		})

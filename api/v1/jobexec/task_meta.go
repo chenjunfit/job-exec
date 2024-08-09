@@ -1,4 +1,4 @@
-package job_exec
+package jobexec
 
 import (
 	"github.com/gogf/gf/v2/frame/g"
@@ -15,8 +15,8 @@ type TaskMetaSearchReq struct {
 }
 
 type TaskMetaSearchRes struct {
-	g.Meta   `mime:"application/json"`
-	TaskList []*entity.TaskMeta `json:"taskList"`
+	g.Meta       `mime:"application/json"`
+	TaskMetaList []*entity.TaskMeta `json:"taskMetaList"`
 	common.ListRes
 }
 
@@ -32,14 +32,14 @@ type TaskMetaAddReq struct {
 }
 
 // TaskEditReq 编辑任务接口
-type TaskEditReq struct {
+type TaskMetaEditReq struct {
 	g.Meta `path:"/taskmeta/edit" tags:"任务信息" method:"post" summary:"编辑任务"`
 	Id     string `v:"required" p:"id"`
 	model.TaskMetaAddReq
 }
 
 // TaskDeleteReq 删除任务接口
-type TaskDeleteReq struct {
+type TaskMetaDeleteReq struct {
 	g.Meta `path:"/taskmeta/del" tags:"任务信息" method:"post" summary:"删除任务"`
 	Id     string `v:"required" p:"id"`
 }
