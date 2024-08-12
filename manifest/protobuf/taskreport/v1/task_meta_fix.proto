@@ -1,0 +1,25 @@
+// ==========================================================================
+// Code generated and maintained by GoFrame CLI tool. DO NOT EDIT.
+// ==========================================================================
+
+syntax = "proto3";
+
+package v1;
+
+option go_package = "api/taskreport/protobuf/v1";
+
+import "google/protobuf/timestamp.proto";
+
+message TaskMetaFix {
+  int32                     Id         = 1;  // 任务id
+  string                    Title      = 2;  // 标题
+  string                    Account    = 3;  // 脚本执行账号
+  repeated string                    ExecHosts  = 4;  // 执行的机器列表
+  string                    Script     = 5;  // 执行的脚本
+  string                    ScriptArgs = 6;  // 脚本参数
+  repeated string                    Creator    = 7;  // 创建者
+  int32                     Done       = 8;  // 执行是否结束：0:没结束 1:结束
+  google.protobuf.Timestamp CreateAt   = 9;  //
+  google.protobuf.Timestamp UpdateAt   = 10; //
+  google.protobuf.Timestamp DeleteAt   = 11; //
+}

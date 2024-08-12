@@ -1,0 +1,23 @@
+// ==========================================================================
+// Code generated and maintained by GoFrame CLI tool. DO NOT EDIT.
+// ==========================================================================
+
+syntax = "proto3";
+
+package v1;
+
+option go_package = "api/taskreport/protobuf/v1";
+
+import "google/protobuf/timestamp.proto";
+
+message TaskResult {
+    int64                     Id       = 1; //                     
+    int64                     TaskId   = 2; // 任务id              
+    string                    Host     = 3; // 执行的具体机器信息  
+    string                    Status   = 4; // 任务执行结果        
+    string                    Stdout   = 5; // 标准输出            
+    string                    StdErr   = 6; // 标准错误            
+    google.protobuf.Timestamp CreateAt = 7; //                     
+    google.protobuf.Timestamp UpdateAt = 8; //                     
+    google.protobuf.Timestamp DeleteAt = 9; //                     
+}

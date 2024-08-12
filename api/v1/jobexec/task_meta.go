@@ -3,8 +3,8 @@ package jobexec
 import (
 	"github.com/gogf/gf/v2/frame/g"
 	"job-exec/api/v1/common"
-	"job-exec/internal/model"
-	"job-exec/internal/model/entity"
+	"job-exec/internal/app/server/model"
+	"job-exec/internal/app/server/model/entity"
 )
 
 // TaskMetaSearchReq 搜索,查询请求参数

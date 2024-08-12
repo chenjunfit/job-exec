@@ -1,13 +1,11 @@
 package main
 
 import (
-	_ "job-exec/internal/logic"
-	"job-exec/internal/logic/tasksync"
-
 	"context"
+	_ "job-exec/internal/app/server/logic/jobexec"
+	"job-exec/internal/app/server/logic/tasksync"
+	_ "job-exec/internal/boot"
 	"job-exec/internal/cmd"
-	_ "job-exec/internal/logic/jobexec"
-	_ "job-exec/internal/packed"
 	"os"
 	"os/signal"
 	"syscall"

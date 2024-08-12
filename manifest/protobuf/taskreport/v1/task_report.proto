@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package v1;
+
+option go_package = "api/taskreport/protobuf/v1";
+
+import "task_meta_fix.proto";
+import "task_result.proto";
+
+message TaskReportReq{
+  repeated TaskResult Results=1;
+  string AgentIp=2;
+}
+message TaskReportRes{
+  repeated TaskMetaFix AssignTasks=1;
+}
+service Service{
+  rpc TaskReport(TaskReportReq) returns (TaskReportRes);
+}
