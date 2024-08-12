@@ -3,7 +3,6 @@ package tasksync
 import (
 	"context"
 	"github.com/gogf/gf/v2/errors/gerror"
-	"github.com/gogf/gf/v2/frame/g"
 	v1 "job-exec/api/taskreport/v1"
 	"job-exec/internal/app/server/dao"
 	"job-exec/utility/liberr"
@@ -16,22 +15,22 @@ import (
 //3.定时每5秒去读取一次
 
 func init() {
-	TaskCache = TaskSync{
-		tasksMap: make(map[string][]*v1.TaskMetaFix),
+	TaskCache = &TaskSync{
+		TasksMap: make(map[string][]*v1.TaskMetaFix),
 	}
 }
 
-var TaskCache TaskSync
+var TaskCache *TaskSync
 
 type TaskSync struct {
 	sync.Mutex
-	tasksMap map[string][]*v1.TaskMetaFix
+	TasksMap map[string][]*v1.TaskMetaFix
 }
 
 func (t *TaskSync) GetTasksByIp(ip string) []*v1.TaskMetaFix {
 	t.Lock()
 	defer t.Unlock()
-	res, ok := t.tasksMap[ip]
+	res, ok := t.TasksMap[ip]
 	if !ok {
 		res = make([]*v1.TaskMetaFix, 0)
 	}
@@ -40,11 +39,11 @@ func (t *TaskSync) GetTasksByIp(ip string) []*v1.TaskMetaFix {
 func (t *TaskSync) SyncManager(ctx context.Context) error {
 	ticker := time.NewTicker(time.Second * 5)
 	defer ticker.Stop()
+	t.DoSyncTask(ctx)
 	for {
 		select {
 		case <-ticker.C:
-			t.doSyncTask(ctx)
-			g.Dump(t.tasksMap)
+			t.DoSyncTask(ctx)
 		case <-ctx.Done():
 			return gerror.New("Context Done")
 		}
@@ -52,7 +51,7 @@ func (t *TaskSync) SyncManager(ctx context.Context) error {
 	}
 }
 
-func (t *TaskSync) doSyncTask(ctx context.Context) (err error) {
+func (t *TaskSync) DoSyncTask(ctx context.Context) (err error) {
 	//获取未完成的任务
 	taskMetas := make([]*v1.TaskMetaFix, 0)
 	m := make(map[string][]*v1.TaskMetaFix)
@@ -84,6 +83,6 @@ func (t *TaskSync) doSyncTask(ctx context.Context) (err error) {
 	}
 	t.Mutex.Lock()
 	defer t.Mutex.Unlock()
-	t.tasksMap = m
+	t.TasksMap = m
 	return
 }

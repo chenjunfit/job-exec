@@ -29,7 +29,7 @@ func (s *sTaskReport) TaskReport(ctx context.Context, req *v1.TaskReportReq) (re
 			for _, task := range req.Results {
 				_, err = dao2.TaskResult.Ctx(ctx).Data(v1.TaskResult{
 					TaskId: task.TaskId,
-					Host:   task.Host,
+					Host:   req.AgentIp,
 					Status: task.Status,
 					Stdout: task.Stdout,
 					StdErr: task.StdErr,
@@ -40,11 +40,12 @@ func (s *sTaskReport) TaskReport(ctx context.Context, req *v1.TaskReportReq) (re
 		})
 	}
 	dao2.TaskMeta.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
-		_, err = tx.Model("task_meta").WhereIn("task_id", doneTaskIds).Update()
+		_, err = tx.Model("task_meta").WhereIn("id", doneTaskIds).Data(g.Map{"done": 1}).Update()
 		return err
 	})
-	//给agent发送带待处理的任务
-	res.AssignTasks = tasksync.TaskCache.GetTasksByIp(req.AgentIp)
-
+	//给agent发送带待处理的任务'
+	res = &v1.TaskReportRes{}
+	tasks := tasksync.TaskCache.GetTasksByIp("192.168.0.2")
+	res.AssignTasks = append(res.AssignTasks, tasks...)
 	return res, nil
 }
