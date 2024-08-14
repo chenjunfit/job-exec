@@ -27,13 +27,19 @@ func (s *sTaskReport) TaskReport(ctx context.Context, req *v1.TaskReportReq) (re
 	if len(req.Results) > 0 {
 		err = g.Try(ctx, func(ctx context.Context) {
 			for _, task := range req.Results {
-				_, err = dao2.TaskResult.Ctx(ctx).Data(v1.TaskResult{
+				id, err := dao2.TaskResult.Ctx(ctx).Where("host", task.Host).Where("task_id", task.TaskId).Value("id")
+				data := v1.TaskResult{
 					TaskId: task.TaskId,
 					Host:   req.AgentIp,
 					Status: task.Status,
 					Stdout: task.Stdout,
 					StdErr: task.StdErr,
-				}).Insert()
+				}
+				if id != nil {
+					_, err = dao2.TaskResult.Ctx(ctx).Where("host", task.Host).Where("task_id", task.TaskId).Data(data).Update()
+					liberr.ErrIsNil(ctx, err, "更新执行结果失败")
+				}
+				_, err = dao2.TaskResult.Ctx(ctx).Data(data).Insert()
 				liberr.ErrIsNil(ctx, err, "插入执行结果失败")
 				doneTaskIds = append(doneTaskIds, task.TaskId)
 			}
@@ -45,7 +51,7 @@ func (s *sTaskReport) TaskReport(ctx context.Context, req *v1.TaskReportReq) (re
 	})
 	//给agent发送带待处理的任务'
 	res = &v1.TaskReportRes{}
-	tasks := tasksync.TaskCache.GetTasksByIp("192.168.0.2")
+	tasks := tasksync.TaskCache.GetTasksByIp(req.AgentIp)
 	res.AssignTasks = append(res.AssignTasks, tasks...)
 	return res, nil
 }

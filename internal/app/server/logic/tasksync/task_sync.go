@@ -69,13 +69,12 @@ func (t *TaskSync) DoSyncTask(ctx context.Context) (err error) {
 			}
 			task := &v1.TaskMetaFix{
 				Id:         taskMeta.Id,
-				Title:      taskMeta.Title,
 				Account:    taskMeta.Account,
 				Script:     taskMeta.Script,
 				ScriptArgs: taskMeta.ScriptArgs,
-				Creator:    taskMeta.Creator,
 				Done:       taskMeta.Done,
 			}
+			task.Action = "start"
 			hostTaskMetas = append(hostTaskMetas, task)
 			m[host] = hostTaskMetas
 		}

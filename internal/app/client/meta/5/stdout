@@ -1,0 +1,6 @@
+total 8
+srwx------  1 chenjun  wheel    0 Aug  5 14:35 com.adobe.AdobeIPCBroker.ctrl-chenjun
+-rw-r--r--  1 chenjun  wheel  328 Aug 14 13:12 com.alibaba.security.check.plist
+drwx------  3 chenjun  wheel   96 Aug  5 14:34 com.apple.launchd.zAHvpjFB2R
+drwxr-xr-x  2 chenjun  wheel   64 Aug 10 13:33 com.sogou.inputmethod
+drwxr-xr-x  2 root     wheel   64 Aug 10 15:18 powerlog
